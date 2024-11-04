@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Upcoming Test</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+            background-color: #f9f9f9; /* Optional background color */
+        }
+
+        #generateForm {
+            border: 2px solid black;
+            padding: 20px; /* Space inside the border */
+            border-radius: 10px; /* Rounded corners */
+            width: 90%; /* Responsive width */
+            max-width: 500px; /* Maximum width */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            background-image: linear-gradient(to right ,pink ,rgb(81, 81, 169));
+        }
+
+        h1 {
+            text-align: center; /* Center the heading */
+            margin-bottom: 40px; /* Space below the heading */
+        }
+
+        .form-group {
+            display: flex; /* Use flexbox for alignment */
+            justify-content: space-between; /* Space between label and input */
+            margin-bottom: 10px; /* Space between form groups */
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+        }
+
+        label {
+            font-family: 'Arial', sans-serif; 
+          font-size: 16px; 
+          font-weight: bold;
+            width: 40%; /* Adjust label width */
+            margin-right: 10px; /* Space between label and input */
+        }
+
+        input {
+            flex: 1; /* Input takes remaining space */
+        }
+
+        button {
+            display: block;
+            margin: auto;
+            margin-top: 10%;
+            padding: 10px 20px; /* Padding for button */
+            font-size: 16px; /* Button text size */
+        }
+        
+
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column; /* Stack label and input vertically */
+                align-items: flex-start; /* Align items to the start */
+            }
+
+            label {
+                width: 100%; /* Full width for label */
+                margin-bottom: 5px; /* Space below label */
+            }
+
+            input {
+                width: 100%; /* Full width for input */
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <form id="generateForm">
+        <h1>Generate Upcoming Test</h1>
+        <div class="form-group">
+            <label for="numSubjects">Enter number of subjects:</label>
+            <input type="number" id="numSubjects" min="1" required>
+        </div>
+        <button type="button" onclick="generateFields()">Generate</button>
+    </form>
+
+    <form id="testForm" style="display:none;">
+        <div id="subjectFields"></div>
+        <button type="button" onclick="saveData()">Save Data</button>
+    </form>
+    <a href="./upcmg-main/frontend/upcoming_test.html"  >generateihu</a>
+
+    <script>
+        function generateFields() {
+            const numSubjects = document.getElementById('numSubjects').value;
+            const subjectFields = document.getElementById('subjectFields');
+            subjectFields.innerHTML = '';
+
+            for (let i = 1; i <= numSubjects; i++) {
+                subjectFields.innerHTML += `
+                    <div class="subject-group">
+                        <h3>Subject ${i}</h3>
+                        <div class="form-group">
+                            <label for="subjectName${i}">Subject Name:</label>
+                            <input type="text" id="subjectName${i}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subjectDate${i}">Date:</label>
+                            <input type="date" id="subjectDate${i}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subjectTime${i}">Time:</label>
+                            <input type="time" id="subjectTime${i}" required>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('testForm').style.display = 'block';
+        }
+
+        function saveData() {
+            const numSubjects = document.getElementById('numSubjects').value;
+            const tests = [];
+
+            for (let i = 1; i <= numSubjects; i++) {
+                const test = {
+                    subjectName: document.getElementById(`subjectName${i}`).value,
+                    subjectDate: document.getElementById(`subjectDate${i}`).value,
+                    subjectTime: document.getElementById(`subjectTime${i}`).value
+                };
+                tests.push(test);
+            }
+
+            localStorage.setItem('upcomingTests', JSON.stringify(tests));
+            alert('Data saved successfully!');
+        }
+    </script>
+</body>
+</html>
